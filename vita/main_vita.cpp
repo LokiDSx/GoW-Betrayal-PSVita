@@ -1,6 +1,6 @@
 // PS Vita platform layer. The PSP port (psp/main_psp.cpp) is the reference: same
 // frame loop, same MIDP key codes, same menu rows. Differences are the renderer
-// (vita2d, 720x408 -> 960x544) and the storage layout (ux0:data/gow-betrayal).
+// (vita2d, 480x272 -> 960x544) and the storage layout (ux0:data/gow-betrayal).
 #include <vita2d.h>
 
 #include <psp2/ctrl.h>
@@ -121,10 +121,10 @@ void showError(const char* message) {
   if (vita::gVideo.ready()) {
     Surface s(kVitaWidth, kScreenH);
     s.fillRectArgb(0, 0, kVitaWidth, kScreenH, 0xFF100808u);
-    drawText(s, 32, 40, kVitaWidth - 64, "GOD OF WAR: BETRAYAL", 0xFFFFC46Bu, 2);
-    drawText(s, 32, 92, kVitaWidth - 64, kBuild, 0xFF808080u, 1);
-    drawText(s, 32, 130, kVitaWidth - 64, message, 0xFFFFFFFFu, 2);
-    drawText(s, 32, kScreenH - 48, kVitaWidth - 64, "Press START to quit.", 0xFFA0A0A0u, 1);
+    drawText(s, 24, 32, kVitaWidth - 48, "GOD OF WAR: BETRAYAL", 0xFFFFC46Bu, 2);
+    drawText(s, 24, 76, kVitaWidth - 48, kBuild, 0xFF808080u, 1);
+    drawText(s, 24, 104, kVitaWidth - 48, message, 0xFFFFFFFFu, 1);
+    drawText(s, 24, kScreenH - 32, kVitaWidth - 48, "Press START to quit.", 0xFFA0A0A0u, 1);
     vita::gVideo.present(s);
   }
   while (!exiting) {
@@ -168,14 +168,14 @@ double nowMs() { return (double)sceKernelGetProcessTimeWide() / 1000.0; }
 String Port::label(int row) {
   if (Game::languageIndex == 6 || Game::languageIndex == 7) {
     const bool ru = Game::languageIndex == 6;
-    if (row == 0) return String(ru ? u"Экран: 720x408" : u"Екран: 720x408");
+    if (row == 0) return String(ru ? u"Экран: 480x272" : u"Екран: 480x272");
     if (row == 1)
       return String(ru ? (vita::gVideo.smoothScaling() ? u"Масштаб: мягкий" : u"Масштаб: чёткий")
                        : (vita::gVideo.smoothScaling() ? u"Масштаб: м'який" : u"Масштаб: чіткий"));
     return String(ru ? (fps == 30 ? u"Кадры: 30" : u"Кадры: 25")
                      : (fps == 30 ? u"Кадри: 30" : u"Кадри: 25"));
   }
-  if (row == 0) return String(u"Screen: 720x408");
+  if (row == 0) return String(u"Screen: 480x272");
   if (row == 1)
     return String(vita::gVideo.smoothScaling() ? u"Pixel scale: smooth" : u"Pixel scale: sharp");
   return String(fps == 30 ? u"FPS: 30" : u"FPS: 25");

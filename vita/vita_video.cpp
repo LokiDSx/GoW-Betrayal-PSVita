@@ -3,6 +3,7 @@
 #include <vita2d.h>
 
 #include <algorithm>
+#include <cstdio>
 #include <cstring>
 
 namespace gow {
@@ -12,6 +13,14 @@ namespace {
 
 constexpr float kScaleX = 960.0f / kVitaWidth;
 constexpr float kScaleY = 544.0f / kScreenH;
+
+// The renderer has no logger of its own; mirror the game log's path.
+void videoLog(const char* text) {
+  if (FILE* f = std::fopen("ux0:data/gow-betrayal/gow-vita.log", "a")) {
+    std::fprintf(f, "[vita-001] %s\n", text);
+    std::fclose(f);
+  }
+}
 
 // sceGxmTextureGetStride reports texels on some builds and bytes on others; both
 // agree once the texture is at least its own width * 4 bytes wide.
@@ -34,10 +43,14 @@ bool Video::init() {
   // This vita2d build returns 1 on success on every path (the budget-info
   // failure falls back to sceGxmInitialize), so only a negative value is fatal.
   const int started = vita2d_init();
+  char note[64];
+  std::snprintf(note, sizeof note, "vita2d_init returned %d", started);
+  videoLog(note);
   if (started < 0) return false;
   vita2d_set_clear_color(0xFF000000);
   tex_ = vita2d_create_empty_texture(kVitaWidth, kScreenH);
   if (!tex_) {
+    videoLog("create_empty_texture failed");
     vita2d_fini();
     return false;
   }

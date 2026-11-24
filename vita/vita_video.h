@@ -1,8 +1,9 @@
 // vita2d presentation of the game's software framebuffer.
 //
-// The game renders kVitaWidth x kScreenH (720x408) ABGR8888 words (see nativeColor)
-// into a Surface; Video uploads them into one texture and scales it to the panel's
-// 960x544. 720x408 is exactly 4:3 and 408 * 4/3 = 544, so the whole panel is used.
+// The game renders kVitaWidth x kScreenH (480x272) ABGR8888 words (see nativeColor)
+// into a Surface; Video uploads them into one texture and scales it x2 to the
+// panel's 960x544. The chain is entirely integer, so each game pixel is an
+// exact 2x2 block on screen.
 #pragma once
 #include <cstdint>
 
@@ -25,8 +26,8 @@ class Video {
   // whole panel, so a 480x272 source lands on exact 2x pixels.
   void present565(const uint16_t* rgb565, int w, int h);
 
-  // true = bilinear, false = point. Point keeps the game's 240->720->960 pixel
-  // blocks exactly 4 screen pixels wide.
+  // true = bilinear, false = point. Point keeps the game's 240->480->960 pixel
+  // blocks exactly 2 screen pixels wide.
   void setSmoothScaling(bool smooth);
   bool smoothScaling() const { return smooth_; }
 

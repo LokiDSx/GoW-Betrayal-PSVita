@@ -1,7 +1,7 @@
 # God of War: Betrayal — PS Vita port
 
 A native PS Vita build of the handheld port (`Akrgood/gow-betrayal-psp` family):
-720x408 internal framebuffer point-scaled to the 960x544 panel (each logical
+480x272 internal framebuffer point-scaled to the 960x544 panel (each logical
 pixel lands on an exact 2x2 block), vita2d rendering, `sceAudioOut` BGM-port
 audio at the synth's native 44100 Hz, RU/UK localisation included.
 
@@ -57,7 +57,7 @@ Without the banks the app opens an error screen naming this exact path.
 
 ## Options menu rows (port-specific)
 
-- **Screen: 720x408** — fixed frame size.
+- **Screen: 480x272** — fixed frame size (the PSP fork's framing).
 - **Pixel scale: sharp / smooth** — point or bilinear panel scaling.
 - **FPS: 25 / 30** — logic rate (the original targets 25).
 

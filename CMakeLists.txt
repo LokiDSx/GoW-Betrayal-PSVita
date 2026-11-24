@@ -24,7 +24,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options(-fwrapv -fno-strict-aliasing)
 
 # --- generated sources ------------------------------------------------------
-# Game.cpp is specialized for the handheld layout (720x408 + Russian/Ukrainian),
+# Game.cpp is specialized for the handheld layout (480x272 + Russian/Ukrainian),
 # exactly as the PSP build does it.
 set(GAME_VITA_CPP ${CMAKE_CURRENT_BINARY_DIR}/GameVita.cpp)
 add_custom_command(

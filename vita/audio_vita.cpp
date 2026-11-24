@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
+#include <string>
 
 #include "midi.h"
 #include "platform.h"
@@ -19,6 +20,7 @@ constexpr double tau = 6.283185307179586;
 constexpr int waveSize = 256, waveCount = 8;
 // Higher than the default user priority so the mixer wakes ahead of the renderer.
 constexpr int kAudioPriority = 0x10000080;
+constexpr int kAudioPriorityDefault = 0x10000100;
 constexpr SceSize kAudioStack = 0x10000;
 
 int16_t wave[waveCount][waveSize];
@@ -186,6 +188,13 @@ void mixBaked(int16_t* out) {
   std::fill(out + i, out + block, 0);
 }
 
+// Hex error code for the audio log (sceAudioOut/kernel codes are 0x80......).
+std::string hexErr(int code) {
+  char buf[16];
+  std::snprintf(buf, sizeof buf, "0x%08X", (unsigned)code);
+  return buf;
+}
+
 int audioThread(SceSize, void*) {
   int i = 0;
   while (!ending) {
@@ -241,15 +250,36 @@ bool initAudio() {
     step[i] = (uint32_t)(std::pow(2.0, (i - 69) / 12.0) * 440.0 * (4294967296.0 / rate));
   ending = false;
   sema = sceKernelCreateSema("GOW audio lock", 0, 1, 1, nullptr);
-  if (sema >= 0)
-    port = sceAudioOutOpenPort(SCE_AUDIO_OUT_PORT_TYPE_BGM, block, rate, SCE_AUDIO_OUT_MODE_MONO);
-  if (port >= 0)
-    thread = sceKernelCreateThread("GOW audio", audioThread, kAudioPriority, kAudioStack, 0, 0, nullptr);
-  if (thread >= 0) {
-    if (sceKernelStartThread(thread, 0, nullptr) >= 0) return true;
-    sceKernelDeleteThread(thread);
-    thread = -1;
+  if (sema < 0) {
+    audioLog("sema failed: " + hexErr(sema));
+    shutdownAudio();
+    return false;
   }
+  port = sceAudioOutOpenPort(SCE_AUDIO_OUT_PORT_TYPE_BGM, block, rate, SCE_AUDIO_OUT_MODE_MONO);
+  if (port < 0) {
+    audioLog("openPort(BGM,512,44100,mono) failed: " + hexErr(port));
+    shutdownAudio();
+    return false;
+  }
+  thread = sceKernelCreateThread("GOW audio", audioThread, kAudioPriority, kAudioStack, 0, 0, nullptr);
+  if (thread < 0) {
+    // Some firmwares reject the boosted priority; the default user priority works.
+    audioLog("createThread(0x10000080) failed: " + hexErr(thread) + ", retrying default priority");
+    thread = sceKernelCreateThread("GOW audio", audioThread, kAudioPriorityDefault, kAudioStack, 0, 0,
+                                   nullptr);
+  }
+  if (thread < 0) {
+    audioLog("createThread failed: " + hexErr(thread));
+    shutdownAudio();
+    return false;
+  }
+  const int started = sceKernelStartThread(thread, 0, nullptr);
+  if (started >= 0) {
+    audioLog("mixer up: port=" + std::to_string(port) + " thread=" + std::to_string(thread) +
+             " rate=44100 block=512");
+    return true;
+  }
+  audioLog("startThread failed: " + hexErr(started));
   shutdownAudio();
   return false;
 }

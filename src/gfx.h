@@ -13,7 +13,10 @@ constexpr int kScreenW = 240;  // original HUD/layout width
 #ifdef __PSP__
 constexpr int kScreenH = 272, kPspWidth = 480, kPspPitch = 512;
 #elif defined(__vita__)
-constexpr int kScreenH = 408, kVitaWidth = 720;
+// 480x272 renders the world at the PSP fork's proven framing and scales by
+// exactly 2 to the 960x544 panel: every game pixel lands on a 2x2 block, and
+// the software raster walks 2.25x fewer pixels than 720x408 did.
+constexpr int kScreenH = 272, kVitaWidth = 480;
 #else
 constexpr int kScreenH = 320;
 #endif
