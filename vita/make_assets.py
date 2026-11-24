@@ -36,6 +36,12 @@ def cover(image: Image.Image, size: tuple[int, int]) -> Image.Image:
     return resized.crop((left, top, left + tw, top + th))
 
 
+def save(image: Image.Image, path: Path) -> None:
+    # The LiveArea installer rejects true-colour PNGs with 0x8010113D; every
+    # image in a shipping VPK (and the GravityDefied reference) is 8-bit palette.
+    image.convert("P", palette=Image.Palette.ADAPTIVE, colors=256).save(path, optimize=True)
+
+
 def icon(image: Image.Image) -> Image.Image:
     # A square over Kratos' head and the wordmark, anchored to the bottom of the art.
     side = int(image.height * 0.77)
@@ -50,9 +56,9 @@ def main(banner: Path, out: Path) -> None:
     livearea.mkdir(parents=True, exist_ok=True)
     (out / "sce_sys").mkdir(parents=True, exist_ok=True)
 
-    icon(art).save(out / "sce_sys" / "icon0.png")
-    cover(art, BG).save(livearea / "bg.png")
-    cover(art, STARTUP).save(livearea / "startup.png")
+    save(icon(art), out / "sce_sys" / "icon0.png")
+    save(cover(art, BG), livearea / "bg.png")
+    save(cover(art, STARTUP), livearea / "startup.png")
     (livearea / "template.xml").write_text(TEMPLATE, encoding="utf-8")
     print(f"LiveArea artwork -> {out / 'sce_sys'}")
 
