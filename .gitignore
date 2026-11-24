@@ -22,6 +22,10 @@ __pycache__/
 /build_src/
 *.log
 
+# --- Vita port output (regenerable via CMake + vita/make_assets.py) ---
+/build/
+/vita/sce_sys/
+
 # --- Port runtime output ---
 crash.txt
 /betrayal/port/saves/

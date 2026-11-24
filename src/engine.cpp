@@ -3,12 +3,17 @@
 
 #ifdef __PSP__
 #include <pspkernel.h>
+#endif
+#if defined(__PSP__) || defined(__vita__)
 #include <sys/stat.h>
 #include "locale_psp.h"
 #else
 #include <windows.h>
 #include <shellapi.h>
 #include <dbghelp.h>
+#endif
+#ifdef __vita__
+#include <psp2/kernel/processmgr.h>
 #endif
 
 #include <algorithm>
@@ -69,7 +74,7 @@ void logJavaException(const char* where, const JavaException& e) {
   FILE* f = std::fopen("exceptions.log", "a");
   if (!f) return;
   std::fprintf(f, "%s: %s\n", where, e.what);
-#ifndef __PSP__
+#if !defined(__PSP__) && !defined(__vita__)
   HANDLE proc = GetCurrentProcess();
   static bool symInit = false;
   if (!symInit) {
@@ -123,7 +128,7 @@ Engine::Engine(MIDlet* m) : midlet(m) {
   // parallax background); the generic v1.4.8 build has one there, 16 px tiles and different code.
   std::vector<uint8_t> rp19;
   supportedBuild_ = readFile(Platform::dataDir + "/RP19", rp19) && rp19.size() >= 3 && (rp19[1] << 8 | rp19[2]) == 2;
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
   mkdir(Platform::saveDir.c_str(), 0777);
 #else
   CreateDirectoryA(Platform::saveDir.c_str(), nullptr);
@@ -159,6 +164,8 @@ void Engine::postLifecycle(int s) {
     pendingLifecycle_ = s;
 #ifdef __PSP__
     lifecycleTime_ = (double)sceKernelGetSystemTimeWide() / 1000.0;
+#elif defined(__vita__)
+    lifecycleTime_ = (double)sceKernelGetProcessTimeWide() / 1000.0;
 #else
     lifecycleTime_ = (double)GetTickCount64();
 #endif
@@ -171,7 +178,7 @@ void Engine::postLifecycle(int s) {
 // the carrier "more games" link, neither of which this jar configures.
 bool Engine::openUrl(const String& url) {
   if (soundPlayer) soundPlayer->stop();
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
   (void)url;
   return false;
 #else
@@ -293,7 +300,7 @@ int Engine::runInterpolated(double nowMs, Surface& screen, int fps) {
     lastTick_ = nowMs - period;
     nextFrame_ = nowMs;
   }
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
   const bool blendFrames = fps > 25;
   // A slow load or draw may miss one tick. Catch up the simulation with one extra
   // update before painting a single frame; discard only large backlogs.
@@ -355,7 +362,7 @@ int Engine::runInterpolated(double nowMs, Surface& screen, int fps) {
   nextFrame_ += framePeriod;
   if (nowMs > nextFrame_ + framePeriod * 3) nextFrame_ = nowMs;  // fell behind: do not try to catch up
   double wait = nextFrame_ - nowMs;
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
   return wait > 0 ? (int)(wait + 0.999) : 0;
 #else
   return wait > 0 ? (int)wait : 0;
@@ -585,7 +592,7 @@ void Engine::selectBank(int id) {
     if (bank > 0) {
       std::vector<uint8_t> file;
       const std::vector<uint8_t>* bytes = nullptr;
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
       // The complete K800i bank set is under 1 MiB compressed. Retain banks
       // on first use to avoid repeated Memory Stick opens at level transitions.
       constexpr size_t kBankBudget = 1024 * 1024;
@@ -593,7 +600,7 @@ void Engine::selectBank(int id) {
 #endif
       if (!bytes && readFile(Platform::dataDir + "/RP" + std::to_string(bank), file)) {
         bytes = &file;
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
         if (bank < (int)rawBanks_.size() && file.capacity() <= kBankBudget - rawBanksBytes_) {
           rawBanksBytes_ += file.capacity();
           rawBanks_[bank] = std::move(file);
@@ -670,7 +677,7 @@ Image* Engine::loadImage(int id, const Arr<int8_t>& swap) {
     im->w = w;
     im->h = h;
     im->px.resize((size_t)w * (size_t)h);
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
     // stb produces RGBA bytes, which in little endian are already ABGR words.
     std::memcpy(im->px.data(), px, im->px.size() * sizeof(uint32_t));
 #else
@@ -687,7 +694,7 @@ Image* Engine::loadImage(int id, const Arr<int8_t>& swap) {
 Arr<Sprite*> Engine::loadSprites(int id, const Arr<int8_t>& swap) {
   try {
     selectBank(id);
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
     // Geometry is fixed per atlas and decoded image. Reuse it across level retries.
     const int atlasId = (loadedBank_ << 10) | (id & 1023);
 #endif
@@ -706,7 +713,7 @@ Arr<Sprite*> Engine::loadSprites(int id, const Arr<int8_t>& swap) {
       for (int j = 0; j < (g == 0 ? 2 : 4); j++) sizes[k++] = present[g] ? (present[bit++] ? 2 : 1) : 0;
     Image* img = loadImage(imageId, swap);
     if (!img) return Arr<Sprite*>();
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
     auto& cache = spriteCache_[atlasId];
     auto cached = cache.find(img);
     if (cached != cache.end()) return cached->second;
@@ -716,7 +723,7 @@ Arr<Sprite*> Engine::loadSprites(int id, const Arr<int8_t>& swap) {
     Arr<Sprite*> out(count);
     Arr<int16_t> v(10);
     for (int i = 0; i < count; i++) {
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
       owned.emplace_back(new Sprite(img));
       out[i] = owned.back().get();
 #else
@@ -739,7 +746,7 @@ Arr<Sprite*> Engine::loadSprites(int id, const Arr<int8_t>& swap) {
       }
       out[i]->load(v);
     }
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
     cache.emplace(img, out);
     for (auto& sprite : owned) sprite.release();
 #endif
@@ -750,7 +757,7 @@ Arr<Sprite*> Engine::loadSprites(int id, const Arr<int8_t>& swap) {
 }
 
 String Engine::getString(int i) {
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
   if (const auto* localized = pspLocalized(localizationBank_, i)) return String(localized);
 #endif
   try {
@@ -762,7 +769,7 @@ String Engine::getString(int i) {
 }
 
 void Engine::loadStringTable(int id) {
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
   localizationBank_ = id;
   // English supplies non-translatable script markers and original credits.
   if (id == kRussianBank || id == kUkrainianBank) id = 10240;
@@ -820,7 +827,7 @@ Sprite* Engine::findGlyph(char16_t c) {
     else if (v > c) hi = mid - 1;
     else return font_[mid];
   }
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
   if (font_ != nullptr && ((c >= 0x0400 && c <= 0x04ff) || c == u'«' || c == u'»' || c == u'—' ||
                            c == u'’' || c == u'×' || c == u'□' || c == u'○' || c == u'△')) {
     if (auto twin = pspLatinTwin(c)) return findGlyph(twin);

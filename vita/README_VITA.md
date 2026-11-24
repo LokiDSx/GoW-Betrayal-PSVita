@@ -1,0 +1,70 @@
+# God of War: Betrayal — PS Vita port
+
+A native PS Vita build of the handheld port (`Akrgood/gow-betrayal-psp` family):
+720x408 internal framebuffer point-scaled to the 960x544 panel (each logical
+pixel lands on an exact 2x2 block), vita2d rendering, `sceAudioOut` BGM-port
+audio at the synth's native 44100 Hz, RU/UK localisation included.
+
+## Build
+
+Requires [vitasdk](https://vitasdk.org) in `C:\vitasdk` (or `$VITASDK`) with
+`vita2d`, `zlib` (vdpm), plus CMake, Ninja and Python 3 with Pillow:
+
+```
+python vita\make_assets.py <path\to\banner.png> vita     # LiveArea art (once)
+cmake -B build -G Ninja -DCMAKE_TOOLCHAIN_FILE=C:/vitasdk/share/vita.toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+```
+
+Output: `build\gow_betrayal.vpk` (~1.2 MB, no game data inside).
+
+## Install
+
+1. Copy `build\gow_betrayal.vpk` to the Vita and open it with VitaShell.
+2. The LiveArea bubble shows the key art; launch it.
+
+## Game data (required)
+
+The 31 RP resource banks are **not** shipped in the VPK. Prepare them from your
+own Sony Ericsson K800i v1.4.20 JAR on the PC:
+
+```
+python psp\prepare_data.py <path\to\gow.jar> gow_vita_data
+```
+
+Then copy the resulting folder to the console:
+
+```
+ux0:data\gow-betrayal\data\        <- RP1..RP34 (31 files, from prepare_data.py)
+ux0:data\gow-betrayal\saves\       <- created automatically
+ux0:data\gow-betrayal\INTRO.BIN    <- optional PINT intro video
+ux0:data\gow-betrayal\gow-vita.log <- runtime log
+```
+
+Without the banks the app opens an error screen naming this exact path.
+
+## Controls
+
+| Vita | In game | Menu |
+| --- | --- | --- |
+| D-pad / analog | move | navigate |
+| Cross | jump | confirm / start intro |
+| Circle | — | back / down |
+| Square | attack | — |
+| Triangle or R1 | switch weapon | — |
+| L1 or Select | upgrades | — |
+| Start | pause | pause / quit intro |
+
+## Options menu rows (port-specific)
+
+- **Screen: 720x408** — fixed frame size.
+- **Pixel scale: sharp / smooth** — point or bilinear panel scaling.
+- **FPS: 25 / 30** — logic rate (the original targets 25).
+
+## Troubleshooting
+
+- Black screen / immediate exit: read `ux0:data\gow-betrayal\gow-vita.log`
+  (every stage logs a line: boot, intro, audio, state transitions).
+- Error screen text: it names the failing path or exception; START quits.
+- No music: check that `data\timgm.dat` was copied next to the banks
+  (optional — without it the port falls back to the software MIDI synth).

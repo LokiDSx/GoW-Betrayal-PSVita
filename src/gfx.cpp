@@ -179,7 +179,7 @@ bool writeBmp(const Surface& s, const char* path) {
   std::fwrite(hdr, 1, 54, f);
   for (int y = 0; y < s.h; ++y) {
     auto* row = s.px.data() + (size_t)y * s.pitch();
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
     for (int x = 0; x < s.w; ++x) {
       uint32_t c = nativeColor(row[x]);  // red/blue swap is its own inverse
       std::fwrite(&c, 4, 1, f);

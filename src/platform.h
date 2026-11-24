@@ -81,7 +81,7 @@ struct ByteArrayInputStream {
 };
 
 struct MidiSequence;  // platform.cpp: a parsed MIDI file
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
 struct BakedTrack;
 #endif
 
@@ -106,7 +106,7 @@ class Player {
   int loops_ = 1, state_ = 300;
   int64_t endTime_ = 0;  // wav: when a one-shot finishes; 0 = never (looping)
   std::shared_ptr<MidiSequence> seq_;
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
   const BakedTrack* baked_ = nullptr;
 #endif
 };

@@ -16,7 +16,7 @@
 #include "gfx.h"
 #include "jrt.h"
 #include "platform.h"
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
 #include <array>
 #endif
 
@@ -180,7 +180,7 @@ class Engine {
   std::vector<uint8_t> stringBytes_;
   std::vector<int> stringOffsets_;
   std::map<std::string, Image*> imageCache_;
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
   std::map<int, std::map<Image*, Arr<Sprite*>>> spriteCache_;
   std::array<std::vector<uint8_t>, 34> rawBanks_;
   size_t rawBanksBytes_ = 0;

@@ -12,13 +12,15 @@ namespace gow {
 constexpr int kScreenW = 240;  // original HUD/layout width
 #ifdef __PSP__
 constexpr int kScreenH = 272, kPspWidth = 480, kPspPitch = 512;
+#elif defined(__vita__)
+constexpr int kScreenH = 408, kVitaWidth = 720;
 #else
 constexpr int kScreenH = 320;
 #endif
 
 // PlayStation scanout uses ABGR8888; the game APIs always take Java ARGB.
 constexpr uint32_t nativeColor(uint32_t c) {
-#ifdef __PSP__
+#if defined(__PSP__) || defined(__vita__)
   return (c & 0xff00ff00u) | ((c & 0x00ff0000u) >> 16) | ((c & 0x000000ffu) << 16);
 #else
   return c;
