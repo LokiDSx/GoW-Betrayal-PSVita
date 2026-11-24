@@ -33,7 +33,7 @@ The translations in `psp/locales.tsv` and `psp/controls_psp.tsv` are text writte
 
 ## Upstream license note
 
-The upstream PC port does not declare a license in its repository. This fork grants no new rights over the upstream code or the original game. Replace this note with your chosen license for the PSP-specific additions before publishing.
+This fork is distributed under the [MIT license](LICENSE) for its own additions — the PSP layer refinements and the PS Vita layer in `vita/`. The upstream PC port does not declare a license in its repository; MIT therefore grants no rights over that upstream code or over the original game, and this fork adds none.
 
 ## Guidance
 

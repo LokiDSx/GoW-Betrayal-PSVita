@@ -130,6 +130,6 @@ The game writes `gow-psp.log` and, on Java-style exceptions, `exceptions.log` ne
 
 ## License and attribution
 
-See [NOTICE.md](NOTICE.md). No original game data is committed here. The upstream PC port does not declare a license in its repository; confirm the terms you want to publish under before making the fork public. Guidance for PSP-specific work came from [SandstoneDev/psp-developer](https://github.com/SandstoneDev/psp-developer).
+See [NOTICE.md](NOTICE.md). No original game data is committed here. This fork's own additions are released under the [MIT license](LICENSE). The upstream PC port does not declare a license in its repository, so this license covers only the changes made for the PSP and PS Vita ports in this repository. Guidance for PSP-specific work came from [SandstoneDev/psp-developer](https://github.com/SandstoneDev/psp-developer).
 
 This project is not affiliated with, endorsed by, or supported by Sony Interactive Entertainment, Santa Monica Studio, Glu Mobile, Metaflow or the game's original developers and publishers. *God of War* is a trademark of Sony Interactive Entertainment LLC.
