@@ -29,7 +29,7 @@ The 31 RP resource banks are **not** shipped in the VPK. Prepare them from your
 own Sony Ericsson K800i v1.4.20 JAR on the PC:
 
 ```
-python psp\prepare_data.py <path\to\gow.jar> gow_vita_data
+python psp\prepare_data.py God-of-War-Betrayal_K800i_v1420.jar gow_vita_data
 ```
 
 Then copy the resulting folder to the console:
@@ -45,7 +45,7 @@ With the console mounted as a drive the same thing is one command — it stages
 the banks, ships `data\timgm.dat` when it has been baked, and copies the VPK:
 
 ```
-python vita\deploy.py <path\to\gow.jar> <console-root>
+python vita\deploy.py God-of-War-Betrayal_K800i_v1420.jar <console-root>
 ```
 
 Without the banks the app opens an error screen naming this exact path.
@@ -61,9 +61,9 @@ Bake it once on the PC (FluidSynth + FFmpeg + `TimGM6mb.sf2`), then let the
 deploy script carry it to the console:
 
 ```
-python psp\bake_timgm.py <path\to\gow.jar> \path\to\TimGM6mb.sf2 <staging-folder>
+python psp\bake_timgm.py God-of-War-Betrayal_K800i_v1420.jar \path\to\TimGM6mb.sf2 <staging-folder>
 copy <staging-folder>\data\timgm.dat data\timgm.dat
-python vita\deploy.py <path\to\gow.jar> <console-root>
+python vita\deploy.py God-of-War-Betrayal_K800i_v1420.jar <console-root>
 ```
 
 `vita/deploy.py` copies `data/timgm.dat` automatically whenever it exists.

@@ -9,7 +9,7 @@ Steps:
 
 Usage:
     python vita/deploy.py [jar] [root] [--no-vpk]
-Defaults: $GOW_JAR or ./God-of-War-Betrayal_J2ME_EN_v1420.jar, root = M:\
+Defaults: $GOW_JAR or ./God-of-War-Betrayal_K800i_v1420.jar, root = M:\
 """
 import argparse
 import os
@@ -21,7 +21,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 BANKS = tuple(f"RP{i}" for i in range(1, 34) if i not in (11, 31))
-DEFAULT_JAR = Path(os.environ.get("GOW_JAR", "God-of-War-Betrayal_J2ME_EN_v1420.jar"))
+DEFAULT_JAR = Path(os.environ.get("GOW_JAR", "God-of-War-Betrayal_K800i_v1420.jar"))
 DEFAULT_ROOT = Path("M:/")
 VPK = REPO / "build" / "gow_betrayal.vpk"
 
