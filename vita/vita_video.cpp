@@ -31,7 +31,10 @@ Video gVideo;
 
 bool Video::init() {
   if (tex_) return true;
-  if (vita2d_init() != 0) return false;
+  // This vita2d build returns 1 on success on every path (the budget-info
+  // failure falls back to sceGxmInitialize), so only a negative value is fatal.
+  const int started = vita2d_init();
+  if (started < 0) return false;
   vita2d_set_clear_color(0xFF000000);
   tex_ = vita2d_create_empty_texture(kVitaWidth, kScreenH);
   if (!tex_) {
