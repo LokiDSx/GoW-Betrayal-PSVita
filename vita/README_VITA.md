@@ -74,9 +74,9 @@ python vita\deploy.py God-of-War-Betrayal_K800i_v1420.jar <console-root>
 | Vita | In game | Menu |
 | --- | --- | --- |
 | D-pad / analog | move | navigate |
-| Cross | jump | confirm / start intro |
+| Cross | jump, **OK** in QTE | confirm / start intro |
 | Circle | — | back / down |
-| Square | attack | — |
+| Square | attack, **OK** in QTE | - |
 | Triangle or R1 | switch weapon | — |
 | L1 or Select | upgrades | — |
 | Start | pause | pause / quit intro |

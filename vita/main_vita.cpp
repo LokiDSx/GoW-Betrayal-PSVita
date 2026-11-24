@@ -139,6 +139,9 @@ void showError(const char* message) {
 struct Controls {
   bool sent[8]{};
   unsigned suppress = 0;
+  // Cross latched onto FIRE (the QTE "OK" prompt) until it is released, so that
+  // holding it through the next prompt cannot inject a spurious UP press.
+  bool crossFire = false;
   static constexpr int codes[] = {-1, -2, -3, -4, -5, -6, -7, 35};
   void poll(Game& game, bool reset = false) {
     SceCtrlData pad{};
@@ -147,13 +150,18 @@ struct Controls {
     suppress &= pad.buttons;
     const unsigned b = pad.buttons & ~suppress;
     const bool menu = Game::state != 100;
+    const bool cross = (b & SCE_CTRL_CROSS) != 0;
+    // The QTE wants KEY_FIRE (-5, the phone's centre OK key) for its "OK"
+    // prompt (qteDirection 2); let Cross answer that prompt too.
+    if (cross && !menu && Game::qteActive && game.qteDirection == 2) crossFire = true;
+    if (!cross || menu || !Game::qteActive) crossFire = false;
     const bool now[] = {
-        (b & SCE_CTRL_UP) || pad.ly < 64 || (!menu && (b & SCE_CTRL_CROSS)),
+        (b & SCE_CTRL_UP) || pad.ly < 64 || (!menu && cross && !crossFire),
         (b & SCE_CTRL_DOWN) || pad.ly > 192 || (!menu && (b & SCE_CTRL_CIRCLE)),
         (b & SCE_CTRL_LEFT) || pad.lx < 64,
         (b & SCE_CTRL_RIGHT) || pad.lx > 192,
-        (b & SCE_CTRL_SQUARE) != 0,
-        (b & (SCE_CTRL_TRIANGLE | SCE_CTRL_R1)) || (menu && (b & SCE_CTRL_CROSS)),
+        ((b & SCE_CTRL_SQUARE) || (crossFire && !menu)) != 0,
+        (b & (SCE_CTRL_TRIANGLE | SCE_CTRL_R1)) || (menu && cross),
         (b & SCE_CTRL_START) || (menu && (b & SCE_CTRL_CIRCLE)),
         (b & (SCE_CTRL_L1 | SCE_CTRL_SELECT)) != 0,
     };
