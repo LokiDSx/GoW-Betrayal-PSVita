@@ -1,9 +1,10 @@
 # God of War: Betrayal — PS Vita port
 
-A native PS Vita build of the handheld port (`Akrgood/gow-betrayal-psp` family):
-640x360 internal framebuffer scaled 1.5x to the 960x544 panel, vita2d rendering,
-`sceAudioOut` BGM-port audio at the synth's native 44100 Hz, RU/UK localisation
-included.
+A native PlayStation Vita port of *God of War: Betrayal*: 640x360 internal
+framebuffer scaled 1.5x to the 960x544 panel, vita2d rendering, `sceAudioOut`
+BGM-port audio at the synth's native 44100 Hz, RU/UK localisation included.
+It builds on the upstream portable code by
+[Akrgood/gow-betrayal-psp](https://github.com/Akrgood/gow-betrayal-psp).
 
 ## Build
 

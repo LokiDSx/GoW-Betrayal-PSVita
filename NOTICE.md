@@ -1,8 +1,6 @@
 # Notices and attribution
 
-This repository is a native PSP port of *God of War: Betrayal*, the 2007 J2ME/mobile Java game by Glu Mobile, built by Metaflow. The game logic comes from the from-scratch behavioural re-implementation in [samioan/gow-betrayal-remastered](https://github.com/samioan/gow-betrayal-remastered) (`bad458d`), which was written by reading the original game's decompiled bytecode. The PSP-specific layer in `psp/` replaces that project's Win32 shell.
-
-The same tree additionally carries a **PlayStation Vita** layer in `vita/` (vita2d renderer, `sceAudioOut` audio, LiveArea packaging and the deploy script), written for this fork.
+This repository is a native **PlayStation Vita** port of *God of War: Betrayal*, the 2007 J2ME/mobile Java game by Glu Mobile, built by Metaflow. The game logic comes from the from-scratch behavioural re-implementation in [samioan/gow-betrayal-remastered](https://github.com/samioan/gow-betrayal-remastered) (`bad458d`), which was written by reading the original game's decompiled bytecode; the port itself started from the upstream handheld port by [Akrgood/gow-betrayal-psp](https://github.com/Akrgood/gow-betrayal-psp). The layer in `vita/` provides the vita2d renderer, `sceAudioOut` audio, LiveArea packaging and the deploy script.
 
 It is not affiliated with, endorsed by, or supported by Sony Interactive Entertainment, Santa Monica Studio, Glu Mobile, Metaflow, or the game's original developers and publishers.
 
