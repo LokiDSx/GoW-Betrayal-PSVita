@@ -59,6 +59,15 @@ def main() -> int:
             copied += 1
         print(f"{copied} banks -> {target}")
 
+        # 2b. optional baked MIDI cache (psp/bake_timgm.py): real instrument
+        # samples instead of the built-in fallback synthesiser.
+        cache = REPO / "data" / "timgm.dat"
+        if cache.is_file():
+            shutil.copy2(cache, target / "timgm.dat")
+            print(f"timgm.dat -> {target / 'timgm.dat'} ({cache.stat().st_size} bytes)")
+        else:
+            print("timgm.dat not baked yet (psp/bake_timgm.py): fallback synth will be used")
+
     # 3. VPK -> console root
     if not a.no_vpk:
         if not VPK.is_file():
