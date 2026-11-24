@@ -13,7 +13,6 @@ The game data is **not** included. You supply your own copy of the Sony Ericsson
 | `src/` | Shared game core, software renderer and Java runtime shims |
 | `src/gen/` | Generated C++ translated from the decompiled Java (do not edit) |
 | `vita/` | Entry point, vita2d renderer, `sceAudioOut` audio, LiveArea VPK and deploy tools |
-| `psp/` | Platform code this build reuses: bank extraction, audio-cache baking, localisation |
 | `tools/gow_psp_patches.py` | Build-time adaptation of the generated game code |
 | `third_party/stb/` | `stb_image` (public domain / MIT) |
 
