@@ -2,6 +2,8 @@
 
 This repository is a native PSP port of *God of War: Betrayal*, the 2007 J2ME/mobile Java game by Glu Mobile, built by Metaflow. The game logic comes from the from-scratch behavioural re-implementation in [samioan/gow-betrayal-remastered](https://github.com/samioan/gow-betrayal-remastered) (`bad458d`), which was written by reading the original game's decompiled bytecode. The PSP-specific layer in `psp/` replaces that project's Win32 shell.
 
+The same tree additionally carries a **PlayStation Vita** layer in `vita/` (vita2d renderer, `sceAudioOut` audio, LiveArea packaging and the deploy script), written for this fork.
+
 It is not affiliated with, endorsed by, or supported by Sony Interactive Entertainment, Santa Monica Studio, Glu Mobile, Metaflow, or the game's original developers and publishers.
 
 ## What is not included
@@ -19,13 +21,15 @@ The translations in `psp/locales.tsv` and `psp/controls_psp.tsv` are text writte
 | Vineflower (development tool only, not shipped) | Apache-2.0 | upstream decompiler |
 | TimGM6mb.sf2 (used offline to render `timgm.dat`) | GPL-2 | Tim Brechbill, David Bolton; <https://packages.debian.org/timgm6mb-soundfont> |
 | PSPSDK / pspdev toolchain | BSD | <https://github.com/pspdev/pspsdk> |
+| VitaSDK (headers, toolchain, vdpm) | see the upstream repositories; nothing is vendored here | <https://github.com/vitasdk> |
+| `vita2d` (PS Vita rendering) | see its upstream repository; only the static library is linked | Vita build |
 | zlib | zlib | linked for intro decompression |
 
-`javalang`, Vineflower, FluidSynth, FFmpeg and PPSSPP are build- or test-time tools; none is embedded in `EBOOT.PBP`.
+`javalang`, Vineflower, FluidSynth, FFmpeg and PPSSPP are build- or test-time tools; none is embedded in `EBOOT.PBP` or in `gow_betrayal.vpk`. VitaSDK, `vita2d` and the Sony system libraries are linked from the toolchain at build time and are not redistributed by this repository.
 
 ## Artwork and intro
 
-`dist/EBOOT.PBP` was built with optional XMB menu artwork (`icon0.png`, `ICON1.PMF`, `pic1.png`, `SND0.at3`) supplied by the owner of this repository. It is not committed; place your own files in `artwork/` before rebuilding. `INTRO.BIN` is likewise a local, optional PINT video file. The "God of War" wordmark and Kratos belong to their owners.
+`dist/EBOOT.PBP` was built with optional XMB menu artwork (`icon0.png`, `ICON1.PMF`, `pic1.png`, `SND0.at3`) supplied by the owner of this repository. It is not committed; place your own files in `artwork/` before rebuilding. `INTRO.BIN` is likewise a local, optional PINT video file. The PS Vita LiveArea art (`icon0.png`, `bg.png`, `startup.png`) is generated into the gitignored `vita/sce_sys/` by `vita/make_assets.py` from artwork supplied by the owner. The "God of War" wordmark and Kratos belong to their owners.
 
 ## Upstream license note
 

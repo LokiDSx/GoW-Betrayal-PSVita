@@ -9,9 +9,10 @@ Steps:
 
 Usage:
     python vita/deploy.py [jar] [root] [--no-vpk]
-Defaults: the jar next to this script's usual location, root = M:\\
+Defaults: $GOW_JAR or ./God-of-War-Betrayal_J2ME_EN_v1420.jar, root = M:\
 """
 import argparse
+import os
 import shutil
 import subprocess
 import sys
@@ -20,7 +21,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 BANKS = tuple(f"RP{i}" for i in range(1, 34) if i not in (11, 31))
-DEFAULT_JAR = Path(r"F:\PS Vita\111\God-of-War-Betrayal_J2ME_EN_v1420.jar")
+DEFAULT_JAR = Path(os.environ.get("GOW_JAR", "God-of-War-Betrayal_J2ME_EN_v1420.jar"))
 DEFAULT_ROOT = Path("M:/")
 VPK = REPO / "build" / "gow_betrayal.vpk"
 
@@ -33,7 +34,8 @@ def main() -> int:
     a = p.parse_args()
 
     if not a.jar.is_file():
-        sys.exit(f"jar not found: {a.jar}")
+        sys.exit(f"jar not found: {a.jar}\n"
+                 f"pass the path: python vita/deploy.py <jar> [root]  (or set GOW_JAR)")
     if not a.root.is_dir():
         sys.exit(f"console root not found: {a.root} (is the USB mount connected?)")
 

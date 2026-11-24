@@ -41,7 +41,32 @@ ux0:data\gow-betrayal\INTRO.BIN    <- optional PINT intro video
 ux0:data\gow-betrayal\gow-vita.log <- runtime log
 ```
 
+With the console mounted as a drive the same thing is one command — it stages
+the banks, ships `data\timgm.dat` when it has been baked, and copies the VPK:
+
+```
+python vita\deploy.py <path\to\gow.jar> <console-root>
+```
+
 Without the banks the app opens an error screen naming this exact path.
+
+## Audio cache (recommended)
+
+`data/timgm.dat` (~386 KiB) holds all 11 original MIDI tracks pre-rendered with
+the [TimGM6mb](https://packages.debian.org/timgm6mb-soundfont) soundfont, so the
+console needs neither FluidSynth nor a SoundFont. Without that file the port
+falls back to a built-in synthesizer, which is audibly rougher.
+
+Bake it once on the PC (FluidSynth + FFmpeg + `TimGM6mb.sf2`), then let the
+deploy script carry it to the console:
+
+```
+python psp\bake_timgm.py <path\to\gow.jar> \path\to\TimGM6mb.sf2 <staging-folder>
+copy <staging-folder>\data\timgm.dat data\timgm.dat
+python vita\deploy.py <path\to\gow.jar> <console-root>
+```
+
+`vita/deploy.py` copies `data/timgm.dat` automatically whenever it exists.
 
 ## Controls
 

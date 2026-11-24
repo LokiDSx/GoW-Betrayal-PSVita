@@ -1,6 +1,8 @@
-# God of War: Betrayal — PSP port
+# God of War: Betrayal — PSP and PS Vita ports
 
 A native PlayStation Portable port of the 2007 J2ME game *God of War: Betrayal*. It reuses the translated C++ game logic from [samioan/gow-betrayal-remastered](https://github.com/samioan/gow-betrayal-remastered) (commit `bad458d`) and replaces the Windows platform layer with a PSP one. No Java emulator is involved.
+
+The same core also builds for the **PlayStation Vita**: a vita2d renderer, `sceAudioOut` audio, a 640×360 framebuffer scaled 1.5× to the 960×544 panel and a LiveArea VPK. See [`vita/README_VITA.md`](vita/README_VITA.md).
 
 The game data is **not** included. You supply your own copy of the Sony Ericsson K800i JAR, MIDlet version **1.4.20**.
 
@@ -11,6 +13,7 @@ The game data is **not** included. You supply your own copy of the Sony Ericsson
 | `src/` | Shared game core, software renderer and Java runtime shims |
 | `src/gen/` | Generated C++ translated from the decompiled Java (do not edit) |
 | `psp/` | PSP entry point, audio, intro, localization and build scripts |
+| `vita/` | PS Vita entry point, vita2d renderer, `sceAudioOut` audio, LiveArea VPK and deploy tools |
 | `tools/gow_psp_patches.py` | Build-time adaptation of the generated game code |
 | `third_party/stb/` | `stb_image` (public domain / MIT) |
 | `dist/EBOOT.PBP` | Prebuilt executable, including optional XMB menu artwork |
@@ -35,6 +38,26 @@ Saves are written to `GOWBETRAYAL/saves/`. Replace only `EBOOT.PBP` when updatin
 ### PPSSPP
 
 Open `dist/EBOOT.PBP` with **File → Load**, after running `prepare_data.py` against the `dist/` folder as well. Do not launch it from a path containing `PSP/GAME`: PPSSPP interprets that as a path on its own virtual memory stick. Verified with PPSSPP 1.20.4. For a crisp pixel grid use an integer window scale and **Nearest** texture filtering.
+
+## Play on a PS Vita
+
+1. Build the VPK — needs [VitaSDK](https://vitasdk.org) in `C:\vitasdk` (or `$VITASDK`) with `vita2d` and `zlib`, plus CMake, Ninja and Python 3 with Pillow:
+
+   ```sh
+   python3 vita/make_assets.py artwork/banner.png vita   # LiveArea art, once
+   cmake -B build -G Ninja -DCMAKE_TOOLCHAIN_FILE=C:/vitasdk/share/vita.toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+   cmake --build build                                   # -> build/gow_betrayal.vpk
+   ```
+
+2. With the console mounted as a drive, copy the banks, the audio cache and the VPK in one step:
+
+   ```sh
+   python3 vita/deploy.py /path/to/God-of-War-Betrayal_K800i_v1420.jar /media/PSVITA
+   ```
+
+3. Install `gow_betrayal.vpk` with VitaShell and launch the bubble from LiveArea.
+
+The banks are not shipped in the VPK; without them the app opens an error screen naming `ux0:data/gow-betrayal/data`. Controls, the port-specific options rows and troubleshooting are documented in [`vita/README_VITA.md`](vita/README_VITA.md). Runtime diagnostics append to `ux0:data/gow-betrayal/gow-vita.log`.
 
 ## Controls
 
