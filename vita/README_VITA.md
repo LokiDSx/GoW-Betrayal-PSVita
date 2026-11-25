@@ -78,7 +78,7 @@ python vita\deploy.py God-of-War-Betrayal_K800i_v1420.jar <console-root>
 | Circle | — | back / down |
 | Square | attack, **OK** in QTE | - |
 | Triangle or R1 | switch weapon | — |
-| L1 or Select | upgrades | — |
+| L1 or Select | upgrade and magic menu | — |
 | Start | pause | pause / quit intro |
 
 ## Options menu rows (port-specific)
