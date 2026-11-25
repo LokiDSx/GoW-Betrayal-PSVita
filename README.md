@@ -23,7 +23,7 @@ Generated files are produced from `names.map` and the patch scripts; see `tools/
 Requires [VitaSDK](https://vitasdk.org) in `C:\vitasdk` (or `$VITASDK`) with `vita2d` and `zlib`, plus CMake, Ninja and Python 3 with Pillow:
 
 ```sh
-python3 vita/make_assets.py artwork/banner.png vita   # LiveArea art, once
+python3 vita/make_assets.py <icon> <startup> <bg> vita   # LiveArea art, once
 cmake -B build -G Ninja -DCMAKE_TOOLCHAIN_FILE=C:/vitasdk/share/vita.toolchain.cmake -DCMAKE_BUILD_TYPE=Release
 cmake --build build                                   # -> build/gow_betrayal.vpk
 ```

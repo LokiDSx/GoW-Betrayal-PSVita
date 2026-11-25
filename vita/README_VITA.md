@@ -12,12 +12,12 @@ Requires [vitasdk](https://vitasdk.org) in `C:\vitasdk` (or `$VITASDK`) with
 `vita2d`, `zlib` (vdpm), plus CMake, Ninja and Python 3 with Pillow:
 
 ```
-python vita\make_assets.py <path\to\banner.png> vita     # LiveArea art (once)
+python vita\make_assets.py <icon> <startup> <bg> vita   # LiveArea art (once)
 cmake -B build -G Ninja -DCMAKE_TOOLCHAIN_FILE=C:/vitasdk/share/vita.toolchain.cmake -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
 
-Output: `build\gow_betrayal.vpk` (~1.2 MB, no game data inside).
+Output: `build\gow_betrayal.vpk` (~0.7 MB, no game data inside).
 
 ## Install
 
