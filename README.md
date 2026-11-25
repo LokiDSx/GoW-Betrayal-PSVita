@@ -76,6 +76,12 @@ Russian and Ukrainian were added, with Cyrillic glyphs drawn to match the origin
 
 Control hints keep the original face-button names (□ × ○ △, D-pad, L/R) in **all eight languages**. Outside those instructions the six original language tables are unchanged. Translation sources live in `psp/locales.tsv` and `psp/controls_psp.tsv`; both are compiled into C++ by `psp/gen_locales.py`.
 
+## Credits
+
+- **PC port and the decompiled-to-C++ game logic** — [samioan](https://github.com/samioan), [samioan/gow-betrayal-remastered](https://github.com/samioan/gow-betrayal-remastered)
+- **PSP port** — [Akrgood](https://github.com/Akrgood), [Akrgood/gow-betrayal-psp](https://github.com/Akrgood/gow-betrayal-psp)
+- **PS Vita port** — Loki D.S., [phc.lokilab.ru](https://phc.lokilab.ru)
+
 ## License and attribution
 
 See [NOTICE.md](NOTICE.md). No original game data is committed here. This fork's own additions are released under the [MIT license](LICENSE). The upstream PC port does not declare a license in its repository, so this license covers only the changes made for the port in this repository. Guidance for the handheld-specific work came from [SandstoneDev/psp-developer](https://github.com/SandstoneDev/psp-developer).

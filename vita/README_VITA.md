@@ -6,6 +6,14 @@ BGM-port audio at the synth's native 44100 Hz, RU/UK localisation included.
 It builds on the upstream portable code by
 [Akrgood/gow-betrayal-psp](https://github.com/Akrgood/gow-betrayal-psp).
 
+## Credits
+
+| Part | Author |
+|---|---|
+| PC port and translated game logic | [samioan](https://github.com/samioan) — [gow-betrayal-remastered](https://github.com/samioan/gow-betrayal-remastered) |
+| PSP port | [Akrgood](https://github.com/Akrgood) — [gow-betrayal-psp](https://github.com/Akrgood/gow-betrayal-psp) |
+| PS Vita port | Loki D.S. — [phc.lokilab.ru](https://phc.lokilab.ru) |
+
 ## Build
 
 Requires [vitasdk](https://vitasdk.org) in `C:\vitasdk` (or `$VITASDK`) with

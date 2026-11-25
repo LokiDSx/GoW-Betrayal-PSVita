@@ -29,6 +29,14 @@ The translations in `psp/locales.tsv` and `psp/controls_psp.tsv` are text writte
 
 `dist/EBOOT.PBP` was built with optional XMB menu artwork (`icon0.png`, `ICON1.PMF`, `pic1.png`, `SND0.at3`) supplied by the owner of this repository. It is not committed; place your own files in `artwork/` before rebuilding. `INTRO.BIN` is likewise a local, optional PINT video file. The PS Vita LiveArea art (`icon0.png`, `bg.png`, `startup.png`) is generated into the gitignored `vita/sce_sys/` by `vita/make_assets.py` from artwork supplied by the owner. The "God of War" wordmark and Kratos belong to their owners.
 
+## Credits
+
+| Part | Author |
+|---|---|
+| PC port, decompilation and the translated game logic | [samioan](https://github.com/samioan) — [samioan/gow-betrayal-remastered](https://github.com/samioan/gow-betrayal-remastered) |
+| PSP port | [Akrgood](https://github.com/Akrgood) — [Akrgood/gow-betrayal-psp](https://github.com/Akrgood/gow-betrayal-psp) |
+| PS Vita port (this repository) | Loki D.S. — [phc.lokilab.ru](https://phc.lokilab.ru) |
+
 ## Upstream license note
 
 This fork is distributed under the [MIT license](LICENSE) for its own additions — the PSP layer refinements and the PS Vita layer in `vita/`. The upstream PC port does not declare a license in its repository; MIT therefore grants no rights over that upstream code or over the original game, and this fork adds none.
